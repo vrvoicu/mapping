@@ -18,7 +18,7 @@ class MappingFieldsValuesController extends Controller
             ->join('fields AS f', 'f.mapping_id', '=', 'm.id')
             ->get();*/
 
-        $headModels = Fields::where('mapping_id', $id)->get();
+        $fields = Fields::where('mapping_id', $id)->get();
 
         $groups = DB::table('fields_values')->select('group_id')->groupBy('group_id')->get();
 
@@ -28,7 +28,7 @@ class MappingFieldsValuesController extends Controller
             ->get();
 
         return view('mapping-fields-values.index', [
-            'headModels' => $headModels,
+            'headModels' => $fields,
             'models' => $models,
             'groups' => $groups,
         ]);
