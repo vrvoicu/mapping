@@ -13,13 +13,16 @@ class CreateMappingsTable extends Migration
      */
     public function up()
     {
+        if(!Schema::hasTable('mappings'))
         Schema::create('mappings', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->integer('client_id');
-            $table->string('mapping_name');
+            $table->integer('client_id')->nullable();
+            $table->string('mapping_name',255)->nullable();
+            $table->text('mapping_url')->nullable();
 
             $table->timestamps();
+            $table->timestamp('deleted_at')->nullable();
         });
     }
 

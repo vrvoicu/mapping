@@ -4,11 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Fields extends Model
+class FieldsValues extends Model
 {
     //
-
-    const TYPE_INPUT = 1, TYPE_OUTPUT = 2;
 
     /**
      * The attributes that are mass assignable.
@@ -17,7 +15,8 @@ class Fields extends Model
      */
     protected $fillable = [
         'mapping_id',
-        'field_name',
-        'field_type'
+        'field_id',
+        'field_value',
+        'group_id'
     ];
 }

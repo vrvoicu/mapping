@@ -13,13 +13,16 @@ class CreateFieldsTable extends Migration
      */
     public function up()
     {
+        if(!Schema::hasTable('fields'))
         Schema::create('fields', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->integer('mapping_id');
-            $table->string('field_name', 255);
+            $table->integer('mapping_id')->nullable();
+            $table->string('field_name', 255)->nullable();
+            $table->tinyInteger('field_type')->nullable();
 
             $table->timestamps();
+            $table->timestamp('deleted_at')->nullable();
         });
     }
 

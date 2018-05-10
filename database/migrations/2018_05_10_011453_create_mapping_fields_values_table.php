@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateClientsTable extends Migration
+class CreateMappingFieldsValuesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,14 @@ class CreateClientsTable extends Migration
      */
     public function up()
     {
-        if(!Schema::hasTable('clients'))
-        Schema::create('clients', function (Blueprint $table) {
+        if(!Schema::hasTable('fields_values'))
+        Schema::create('fields_values', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->string('client_name',255)->nullable();
+            $table->integer('mapping_id')->nullable();
+            $table->integer('field_id')->nullable();
+            $table->string('field_value',255)->nullable();
+            $table->integer('group_id');
 
             $table->timestamps();
             $table->timestamp('deleted_at')->nullable();
@@ -31,6 +34,6 @@ class CreateClientsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('clients');
+        Schema::dropIfExists('fields_values');
     }
 }

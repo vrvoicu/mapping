@@ -27,12 +27,25 @@
             <input class="form-control" type="text" name="mapping_url" />
         </div>
 
-        <button type="button" onclick="clone('#create-form', '.field', true)"> + </button>
-        <button type="button" onclick="removeClone('#create-form', '.field', true)"> - </button>
+        <div id="input-container">
+            <button type="button" onclick="clone('#input-container', '.input-field')"> + </button>
+            <button type="button" onclick="removeClone('#input-container', '.input-field')"> - </button>
 
-        <div class="form-group field">
-            <label>Camp</label>
-            <input class="form-control" type="text" name="field_name[]" />
+            <div class="form-group input-field">
+                <label>Camp folosit in mapare</label>
+                <input class="form-control" type="text" name="input_field_name[]" />
+            </div>
+        </div>
+
+        <div id="output-container">
+            <button type="button" onclick="clone('#output-container', '.output-field', true)"> + </button>
+            <button type="button" onclick="removeClone('#output-container', '.output-field', true)"> - </button>
+
+
+            <div class="form-group output-field">
+                <label>Camp rezultat din mapare</label>
+                <input class="form-control" type="text" name="output_field_name[]" />
+            </div>
         </div>
 
         <button type="submit">Salvare</button>
@@ -40,23 +53,13 @@
     </form>
 
     <script>
-        function clone(container, element, isForm){
+        function clone(container, element){
             var container = $(container);
             var element = $($(element)[0]);
-
-            if(isForm) {
-                var button = $('button[type="submit"]');
-                button.remove();
-            }
-
-            console.log(element);
 
             var newElement = element.clone();
 
             container.append(newElement);
-
-            if(isForm)
-                container.append(button);
         }
 
         function removeClone(container, element){
