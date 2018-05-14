@@ -28,6 +28,7 @@ class MappingFieldsValuesController extends Controller
             ->get();
 
         return view('mapping-fields-values.index', [
+            'id' => $id,
             'headModels' => $fields,
             'models' => $models,
             'groups' => $groups,

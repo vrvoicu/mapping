@@ -55,7 +55,78 @@ class MappingsController extends Controller
 
     }
 
+    public function edit($id){
+
+        $model = Mappings::find($id);
+
+        $fields = Fields::where('mapping_id', $model->getKey())->get();
+
+        return view('mappings.edit', [
+            'model' => $model,
+            'fields' => $fields
+        ]);
+
+    }
+
+    public function update(Request $request, $id){
+
+        $rules = [
+            'mapping_name' => 'required',
+            'mapping_url' => 'required',
+        ];
+
+        $this->validate($request, $rules);
+
+        $model = Mappings::find($id);
+
+        $model->mapping_name = $request->input()['mapping_name'];
+        $model->mapping_url = $request->input()['mapping_url'];
+
+        $fields = Fields::where('mapping_id', $model->getKey())->get();
+
+        foreach ($request->input()['input_field_name'] as $fieldName)
+            if(strlen($fieldName) > 0) {
+
+                $field = $fields->firstWhere('field_name', $fieldName);
+
+                if($field == null)
+                    Fields::create([
+                        'mapping_id' => $model->getKey(),
+                        'field_name' => $fieldName,
+                        'field_type' => Fields::TYPE_INPUT
+                    ]);
+                else
+                    $fields = $fields->reject(function($value) use ($field) { return $field->field_name == $value->field_name; });
+            }
+
+        foreach ($request->input()['output_field_name'] as $fieldName)
+            if(strlen($fieldName) > 0) {
+
+                $field = $fields->firstWhere('field_name', $fieldName);
+
+                if($field == null)
+                    Fields::create([
+                        'mapping_id' => $model->getKey(),
+                        'field_name' => $fieldName,
+                        'field_type' => Fields::TYPE_OUTPUT
+                    ]);
+                else
+                    $fields = $fields->reject(function($value) use ($field) { return $field->field_name == $value->field_name; });
+            }
+
+        foreach ($fields as $field)
+            $field->delete();
+
+        $model->save();
+
+        return redirect()->route('mappings.index', ['id' => $model->getKey()]);
+
+    }
+
     public function apply(Request $request, $id){
+
+        $params = $request->input();
+
         $mapping = Mappings::find($id);
 
         $fields = Fields::where('mapping_id', $id)->get();
@@ -67,10 +138,13 @@ class MappingsController extends Controller
             ->where('fields.mapping_id', $id)
             ->get();
 
-        $data = $this->getDataFromUrl($mapping->mapping_url);
-        $data = json_decode($data, true);
+        $url = $mapping->mapping_url . '?';
+        foreach ($params as $paramKey => $paramValue)
+            $url .= $paramKey . '=' . $paramValue . '&';
+        $url = substr($url, 0, strlen($url) -1);
 
-//        dd($data);
+        $data = $this->getDataFromUrl($url);
+        $data = json_decode($data, true);
 
         foreach ($data as $dataKey => $dataRow) {
 
@@ -94,9 +168,11 @@ class MappingsController extends Controller
 
             foreach ($fieldsValues as $fieldValue)
                 if ($fieldValue->field_type == Fields::TYPE_OUTPUT)
-                    $dataRow[$fieldValue->field_name] = $fieldValue->field_value;
+                    $data[$dataKey][$fieldValue->field_name] = $fieldValue->field_value;
 
         }
+
+        return response()->json($data);
 
     }
 

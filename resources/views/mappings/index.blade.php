@@ -13,23 +13,32 @@
 
     @include('errors')
 
-<table class="table">
-    <thead>
-    <tr>
-        <th scope="col">#</th>
-        <th scope="col">First</th>
-        <th scope="col">Last</th>
-        <th scope="col">Handle</th>
-    </tr>
-    </thead>
-    <tbody>
-    @foreach($models as $model)
-    <tr>
-        <td>{{ $model->mapping_name }}</td>
-        <td>{{ $model->mapping_url }}</td>
-    </tr>
-    @endforeach
-    </tbody>
-</table>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Nume</th>
+                        <th>Url</th>
+                        <th>Asignare valori</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($models as $model)
+                    <tr>
+                        <td><a href="{{ route('mappings.edit', ['id' => $model->getKey()]) }}"> {{ $model->mapping_name }} </a></td>
+                        <td>{{ $model->mapping_url }}</td>
+                        <td><a href="{{ route('mapping-fields-values.index', ['id' => $model->getKey()]) }}"> Valori </a></td>
+                    </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
 
 @endsection

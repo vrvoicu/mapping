@@ -19,10 +19,10 @@
                 <a class="nav-link" href="{{ route('clients.index') }}">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
+                <a class="nav-link" href="{{ route('mappings.index') }}">Mapari</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link disabled" href="#">Disabled</a>
+                <a class="nav-link disabled" href="{{ route('mappings.index') }}">Valori</a>
             </li>
         </ul>
     </div>
